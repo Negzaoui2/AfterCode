@@ -1,7 +1,7 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes  } from 'react-router-dom';
-import QRCodePage from './Components/QRCodePage';
-import FormulaireClient from './Components/FormulaireClient';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import QRCodePage from "./Components/QRCodePage";
+import FormulaireClient from "./Components/FormulaireClient";
 const App = () => {
   return (
     <Router>
@@ -12,6 +12,5 @@ const App = () => {
     </Router>
   );
 };
-
 
 export default App;

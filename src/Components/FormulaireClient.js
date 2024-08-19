@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
-import './FormulaireClient.css'; // Ajoutez un fichier CSS séparé pour organiser le style
+import axios from 'axios';
+import './FormulaireClient.css';
+import { useNavigate } from 'react-router-dom';
 
 const FormulaireClient = () => {
   const [formData, setFormData] = useState({
-    nom: '',
-    groupeClient: 'Clients VIP STRASS',
-    typeClient: 'Individuel',
-    email: '',
-    telephone: '',
-    devise: 'TND',
-    pays: 'Tunisia',
-    region: 'Tunisia',
-    etat: '',
-    ville: '',
-    codePostal: '',
-    adresse: '',
-    dateValidite: '',
+    name: "",
+    group_Client: "Clients VIP STRASS",
+    password: "", // Ajout du champ password ici
+    type_Client: "Individuel",
+    email: "",
+    Num_Téléphone: "",
+    Devise: "TND",
+    Pays: "Tunisia",
+    Région: "Tunisia",
+    Etat: "",
+    Ville: "",
+    Code_Postal: "",
+    Adresse: "",
+    Données_valides_jusquà: "", // Utilisation de la clé correcte pour la date de validité
   });
 
   const handleChange = (e) => {
@@ -26,12 +29,30 @@ const FormulaireClient = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Formulaire soumis:', formData);
-    // Ajouter ici le code pour envoyer les données au serveur
-    alert('Les informations ont été sauvegardées avec succès!');
-
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/customers",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Réponse du serveur:", response.data);
+      alert("Les informations ont été sauvegardées avec succès!");
+       // Redirection après soumission réussie
+       // eslint-disable-next-line no-undef
+       navigate('/form'); // Remplace '/success' par la route souhaitée
+    } catch (error) {
+      console.error(
+        "Erreur lors de la soumission du formulaire:",
+        error.response?.data || error.message
+      );
+      alert("Une erreur est survenue lors de la sauvegarde des informations.");
+    }
   };
 
   return (
@@ -40,17 +61,22 @@ const FormulaireClient = () => {
       
       <div className="form-group">
         <label>Nom:</label>
-        <input type="text" name="nom" value={formData.nom} onChange={handleChange} required />
+        <input type="text" name="name" value={formData.name} onChange={handleChange} required />
       </div>
 
       <div className="form-group">
         <label>Groupe Client:</label>
-        <input type="text" name="groupeClient" value={formData.groupeClient} onChange={handleChange} required />
+        <input type="text" name="group_Client" value={formData.group_Client} onChange={handleChange} required />
+      </div>
+
+      <div className="form-group">
+        <label>Mot de passe:</label>
+        <input type="password" name="password" value={formData.password} onChange={handleChange} required />
       </div>
 
       <div className="form-group">
         <label>Type de Client:</label>
-        <input type="text" name="typeClient" value={formData.typeClient} onChange={handleChange} required />
+        <input type="text" name="type_Client" value={formData.type_Client} onChange={handleChange} required />
       </div>
 
       <div className="form-group">
@@ -60,49 +86,49 @@ const FormulaireClient = () => {
 
       <div className="form-group">
         <label>Num. Téléphone:</label>
-        <input type="tel" name="telephone" value={formData.telephone} onChange={handleChange} required />
+        <input type="tel" name="Num_Téléphone" value={formData.Num_Téléphone} onChange={handleChange} required />
       </div>
 
       <div className="form-group">
         <label>Devise:</label>
-        <input type="text" name="devise" value={formData.devise} onChange={handleChange} required />
+        <input type="text" name="Devise" value={formData.Devise} onChange={handleChange} required />
       </div>
 
       <h2 className="form-title">Adresses</h2>
 
       <div className="form-group">
         <label>Pays:</label>
-        <input type="text" name="pays" value={formData.pays} onChange={handleChange} required />
+        <input type="text" name="Pays" value={formData.Pays} onChange={handleChange} required />
       </div>
 
       <div className="form-group">
         <label>Région:</label>
-        <input type="text" name="region" value={formData.region} onChange={handleChange} required />
+        <input type="text" name="Région" value={formData.Région} onChange={handleChange} required />
       </div>
 
       <div className="form-group">
         <label>Etat:</label>
-        <input type="text" name="etat" value={formData.etat} onChange={handleChange} />
+        <input type="text" name="Etat" value={formData.Etat} onChange={handleChange} />
       </div>
 
       <div className="form-group">
         <label>Ville:</label>
-        <input type="text" name="ville" value={formData.ville} onChange={handleChange} />
+        <input type="text" name="Ville" value={formData.Ville} onChange={handleChange} />
       </div>
 
       <div className="form-group">
         <label>Code Postal:</label>
-        <input type="text" name="codePostal" value={formData.codePostal} onChange={handleChange} />
+        <input type="text" name="Code_Postal" value={formData.Code_Postal} onChange={handleChange} />
       </div>
 
       <div className="form-group">
         <label>Adresse:</label>
-        <input type="text" name="adresse" value={formData.adresse} onChange={handleChange} />
+        <input type="text" name="Adresse" value={formData.Adresse} onChange={handleChange} />
       </div>
 
       <div className="form-group">
         <label>Données valables jusqu'à:</label>
-        <input type="date" name="dateValidite" value={formData.dateValidite} onChange={handleChange} />
+        <input type="date" name="Données_valides_jusquà" value={formData.Données_valides_jusquà} onChange={handleChange} />
       </div>
 
       <button className="form-button" type="submit">Sauvegarder</button>
