@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './FormulaireClient.css';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const FormulaireClient = () => {
   const [formData, setFormData] = useState({
@@ -43,9 +43,26 @@ const FormulaireClient = () => {
       );
       console.log("Réponse du serveur:", response.data);
       alert("Les informations ont été sauvegardées avec succès!");
-       // Redirection après soumission réussie
-       // eslint-disable-next-line no-undef
-       navigate('/form'); // Remplace '/success' par la route souhaitée
+       // Réinitialisation du formulaire
+       setFormData({
+        name: "",
+        group_Client: "Clients VIP STRASS",
+        password: "",
+        type_Client: "Individuel",
+        email: "",
+        Num_Téléphone: "",
+        Devise: "TND",
+        Pays: "Tunisia",
+        Région: "Tunisia",
+        Etat: "",
+        Ville: "",
+        Code_Postal: "",
+        Adresse: "",
+        Données_valides_jusquà: "",
+    });
+    
+    Navigate('/form');
+
     } catch (error) {
       console.error(
         "Erreur lors de la soumission du formulaire:",
