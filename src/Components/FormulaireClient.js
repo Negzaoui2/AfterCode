@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './FormulaireClient.css';
-import { Navigate } from 'react-router-dom';
+import { TextField, Button, Grid, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const FormulaireClient = () => {
   const [formData, setFormData] = useState({
     name: "",
     group_Client: "Clients VIP STRASS",
-    password: "", // Ajout du champ password ici
+    password: "", 
     type_Client: "Individuel",
     email: "",
     Num_Téléphone: "",
@@ -18,7 +18,7 @@ const FormulaireClient = () => {
     Ville: "",
     Code_Postal: "",
     Adresse: "",
-    Données_valides_jusquà: "", // Utilisation de la clé correcte pour la date de validité
+    Données_valides_jusquà: "", 
   });
 
   const handleChange = (e) => {
@@ -28,6 +28,28 @@ const FormulaireClient = () => {
       [name]: value,
     }));
   };
+  
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isFormActive = localStorage.getItem("formActive");
+    if (isFormActive) {
+      alert("Le formulaire est déjà ouvert dans un autre onglet.");
+      navigate("/"); 
+    } else {
+      localStorage.setItem("formActive", "true");
+
+      const handleUnload = () => {
+        localStorage.removeItem("formActive");
+      };
+
+      window.addEventListener("beforeunload", handleUnload);
+      return () => {
+        window.removeEventListener("beforeunload", handleUnload);
+        localStorage.removeItem("formActive");
+      };
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,8 +65,8 @@ const FormulaireClient = () => {
       );
       console.log("Réponse du serveur:", response.data);
       alert("Les informations ont été sauvegardées avec succès!");
-       // Réinitialisation du formulaire
-       setFormData({
+      
+      setFormData({
         name: "",
         group_Client: "Clients VIP STRASS",
         password: "",
@@ -59,10 +81,10 @@ const FormulaireClient = () => {
         Code_Postal: "",
         Adresse: "",
         Données_valides_jusquà: "",
-    });
+      });
     
-    Navigate('/form');
-
+      navigate('/form');
+      localStorage.removeItem("formActive");
     } catch (error) {
       console.error(
         "Erreur lors de la soumission du formulaire:",
@@ -73,83 +95,193 @@ const FormulaireClient = () => {
   };
 
   return (
-    <form className="formulaire-client" onSubmit={handleSubmit}>
-      <h2 className="form-title">Informations générales</h2>
-      
-      <div className="form-group">
-        <label>Nom:</label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-      </div>
+    <Box sx={{ maxWidth: 600, margin: 'auto', padding: 3, backgroundColor: '#fff', borderRadius: 2, boxShadow: 3 }}>
+      <form className="formulaire-client" onSubmit={handleSubmit}>
+        <h2 className="form-title">Informations générales</h2>
+        
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              label="Nom"
+              variant="outlined"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Groupe Client:</label>
-        <input type="text" name="group_Client" value={formData.group_Client} onChange={handleChange} required />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Groupe Client"
+              variant="outlined"
+              name="group_Client"
+              value={formData.group_Client}
+              onChange={handleChange}
+              
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Mot de passe:</label>
-        <input type="password" name="password" value={formData.password} onChange={handleChange} required />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Mot de passe"
+              variant="outlined"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Type de Client:</label>
-        <input type="text" name="type_Client" value={formData.type_Client} onChange={handleChange} required />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Type de Client"
+              variant="outlined"
+              name="type_Client"
+              value={formData.type_Client}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Email:</label>
-        <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Email"
+              variant="outlined"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Num. Téléphone:</label>
-        <input type="tel" name="Num_Téléphone" value={formData.Num_Téléphone} onChange={handleChange} required />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Num. Téléphone"
+              variant="outlined"
+              type="tel"
+              name="Num_Téléphone"
+              value={formData.Num_Téléphone}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Devise:</label>
-        <input type="text" name="Devise" value={formData.Devise} onChange={handleChange} required />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Devise"
+              variant="outlined"
+              name="Devise"
+              value={formData.Devise}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+          </Grid>
 
-      <h2 className="form-title">Adresses</h2>
+          <Grid item xs={12}>
+            <h2 className="form-title">Adresses</h2>
+          </Grid>
 
-      <div className="form-group">
-        <label>Pays:</label>
-        <input type="text" name="Pays" value={formData.Pays} onChange={handleChange} required />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Pays"
+              variant="outlined"
+              name="Pays"
+              value={formData.Pays}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Région:</label>
-        <input type="text" name="Région" value={formData.Région} onChange={handleChange} required />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Région"
+              variant="outlined"
+              name="Région"
+              value={formData.Région}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Etat:</label>
-        <input type="text" name="Etat" value={formData.Etat} onChange={handleChange} />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Etat"
+              variant="outlined"
+              name="Etat"
+              value={formData.Etat}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Ville:</label>
-        <input type="text" name="Ville" value={formData.Ville} onChange={handleChange} />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Ville"
+              variant="outlined"
+              name="Ville"
+              value={formData.Ville}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Code Postal:</label>
-        <input type="text" name="Code_Postal" value={formData.Code_Postal} onChange={handleChange} />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Code Postal"
+              variant="outlined"
+              name="Code_Postal"
+              value={formData.Code_Postal}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Adresse:</label>
-        <input type="text" name="Adresse" value={formData.Adresse} onChange={handleChange} />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Adresse"
+              variant="outlined"
+              name="Adresse"
+              value={formData.Adresse}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
 
-      <div className="form-group">
-        <label>Données valables jusqu'à:</label>
-        <input type="date" name="Données_valides_jusquà" value={formData.Données_valides_jusquà} onChange={handleChange} />
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              label="Données valables jusqu'à"
+              variant="outlined"
+              type="date"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              name="Données_valides_jusquà"
+              value={formData.Données_valides_jusquà}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
 
-      <button className="form-button" type="submit">Sauvegarder</button>
-    </form>
+          <Grid item xs={12}>
+            <Button variant="contained" color="primary" type="submit" fullWidth>
+              Sauvegarder
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </Box>
   );
 };
 
