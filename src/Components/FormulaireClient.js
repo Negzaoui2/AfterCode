@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { TextField, Button, Grid, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { TextField, Button, Grid, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 
 const FormulaireClient = () => {
   const [formData, setFormData] = useState({
     name: "",
-    group_Client: "Clients VIP STRASS",
-    password: "", 
-    type_Client: "Individuel",
+    group_Client: "",
+    password: "",
+    type_Client: "",
     email: "",
     Num_Téléphone: "",
     Devise: "TND",
@@ -18,7 +19,7 @@ const FormulaireClient = () => {
     Ville: "",
     Code_Postal: "",
     Adresse: "",
-    Données_valides_jusquà: "", 
+    Données_valides_jusquà: "",
   });
 
   const handleChange = (e) => {
@@ -28,14 +29,14 @@ const FormulaireClient = () => {
       [name]: value,
     }));
   };
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const isFormActive = localStorage.getItem("formActive");
     if (isFormActive) {
       alert("Le formulaire est déjà ouvert dans un autre onglet.");
-      navigate("/"); 
+      navigate("/");
     } else {
       localStorage.setItem("formActive", "true");
 
@@ -51,8 +52,19 @@ const FormulaireClient = () => {
     }
   }, [navigate]);
 
+  const validateDate = (dateString) => {
+    const today = new Date().toISOString().split('T')[0];
+    return dateString > today;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateDate(formData.Données_valides_jusquà)) {
+      alert("La date doit être supérieure à la date d'aujourd'hui.");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:8000/api/customers",
@@ -65,7 +77,7 @@ const FormulaireClient = () => {
       );
       console.log("Réponse du serveur:", response.data);
       alert("Les informations ont été sauvegardées avec succès!");
-      
+
       setFormData({
         name: "",
         group_Client: "Clients VIP STRASS",
@@ -82,8 +94,8 @@ const FormulaireClient = () => {
         Adresse: "",
         Données_valides_jusquà: "",
       });
-    
-      navigate('/form');
+
+      navigate("/form");
       localStorage.removeItem("formActive");
     } catch (error) {
       console.error(
@@ -95,10 +107,19 @@ const FormulaireClient = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 600, margin: 'auto', padding: 3, backgroundColor: '#fff', borderRadius: 2, boxShadow: 3 }}>
+    <Box
+      sx={{
+        maxWidth: 600,
+        margin: "auto",
+        padding: 3,
+        backgroundColor: "#fff",
+        borderRadius: 2,
+        boxShadow: 3,
+      }}
+    >
       <form className="formulaire-client" onSubmit={handleSubmit}>
         <h2 className="form-title">Informations générales</h2>
-        
+
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -112,6 +133,8 @@ const FormulaireClient = () => {
             />
           </Grid>
 
+         
+
           <Grid item xs={12}>
             <TextField
               label="Groupe Client"
@@ -119,7 +142,7 @@ const FormulaireClient = () => {
               name="group_Client"
               value={formData.group_Client}
               onChange={handleChange}
-              
+              required
               fullWidth
             />
           </Grid>
@@ -222,6 +245,7 @@ const FormulaireClient = () => {
               name="Etat"
               value={formData.Etat}
               onChange={handleChange}
+              required
               fullWidth
             />
           </Grid>
@@ -233,6 +257,7 @@ const FormulaireClient = () => {
               name="Ville"
               value={formData.Ville}
               onChange={handleChange}
+              required
               fullWidth
             />
           </Grid>
@@ -244,6 +269,7 @@ const FormulaireClient = () => {
               name="Code_Postal"
               value={formData.Code_Postal}
               onChange={handleChange}
+              required
               fullWidth
             />
           </Grid>
@@ -255,6 +281,7 @@ const FormulaireClient = () => {
               name="Adresse"
               value={formData.Adresse}
               onChange={handleChange}
+              required
               fullWidth
             />
           </Grid>
@@ -270,9 +297,20 @@ const FormulaireClient = () => {
               name="Données_valides_jusquà"
               value={formData.Données_valides_jusquà}
               onChange={handleChange}
+              required
               fullWidth
             />
           </Grid>
+
+          { /* <Grid   item xs={12}>
+            <Autocomplete
+             disablePortal
+             id="combo-box-demo"
+             options={preferredLanguages}
+             sx={{ width: 300 }}
+             renderInput={(params) => <TextField {...params} label="Langue preferée  " />}
+            />
+          </Grid >  */}
 
           <Grid item xs={12}>
             <Button variant="contained" color="primary" type="submit" fullWidth>
@@ -284,5 +322,6 @@ const FormulaireClient = () => {
     </Box>
   );
 };
+// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 
 export default FormulaireClient;

@@ -1,7 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { QRCode } from 'react-qrcode-logo';
-import './FormulaireClient.css'; // Ajoutez un fichier CSS séparé pour organiser le style
+import './FormulaireClient.css'; 
+import { Button } from '@mui/material';
+// Ajoutez un fichier CSS séparé pour organiser le style
 
 
 function QRCodePage() {
@@ -13,11 +15,31 @@ function QRCodePage() {
         navigate('/form');
     };
 
+    const handleViewCustomers = () => {
+        navigate('/customers');
+      };
     return (
-        <div>
+        <div style={{ textAlign: 'center', padding: '20px' }}>
             <h1>Scan the QR Code</h1>
-            <QRCode value={qrData} /> {/* Génération du QR code avec l'URL du formulaire */}
-            <button onClick={handleClick}>Proceed to Form</button>
+            <QRCode value={qrData} />
+            <div style={{ marginTop: '20px' }}>
+                <Button 
+                    variant="contained" 
+                    color="success" 
+                    onClick={handleClick}
+                    style={{ padding: '10px 20px', fontSize: '16px' }}
+                >
+                    Proceed to Form
+                </Button>
+                <Button 
+                    variant="contained" 
+                    color="primary" 
+                    onClick={handleViewCustomers}
+                    style={{ padding: '10px 20px', fontSize: '16px' }}
+                >
+                    View Customers
+                </Button>
+            </div>
         </div>
     );
 }
