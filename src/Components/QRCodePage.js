@@ -11,9 +11,7 @@ function QRCodePage() {
     const  qrData = 'https://after-code-7in5.vercel.app/form'; // Remplacez '192.168.x.x' par l'adresse IP locale de votre machine
     // Utilisation de l'URL de base de l'application
 
-    const handleClick = () => {
-        navigate('/form');
-    };
+    
 
     const handleViewCustomers = () => {
         navigate('/customers');
@@ -23,14 +21,7 @@ function QRCodePage() {
             <h1>Scan the QR Code</h1>
             <QRCode value={qrData} />
             <div style={{ marginTop: '20px' }}>
-                <Button 
-                    variant="contained" 
-                    color="success" 
-                    onClick={handleClick}
-                    style={{ padding: '10px 20px', fontSize: '16px' }}
-                >
-                    Proceed to Form
-                </Button>
+                
                 <Button 
                     variant="contained" 
                     color="primary" 

@@ -31,7 +31,7 @@ const FormulaireClient = () => {
   };
 
   const navigate = useNavigate();
-
+//this function is when i'm open the window of the form i can't opened the form in an other window and submit form in the same time 
   useEffect(() => {
     const isFormActive = localStorage.getItem("formActive");
     if (isFormActive) {
@@ -95,7 +95,7 @@ const FormulaireClient = () => {
         Données_valides_jusquà: "",
       });
 
-      navigate("/form");
+      navigate("/customers");
       localStorage.removeItem("formActive");
     } catch (error) {
       console.error(
