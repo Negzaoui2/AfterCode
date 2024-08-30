@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { TextField, Button, Grid, Box } from "@mui/material";
+import { TextField, Button, Grid, Box, Stepper, Step, StepLabel } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+const steps = ["Informations générales", "Adresses"];
 
 const FormulaireClient = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +23,9 @@ const FormulaireClient = () => {
     Données_valides_jusquà: "",
   });
 
+  const [activeStep, setActiveStep] = useState(0);
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -30,8 +34,6 @@ const FormulaireClient = () => {
     }));
   };
 
-  const navigate = useNavigate();
-//this function is when i'm open the window of the form i can't opened the form in an other window and submit form in the same time 
   useEffect(() => {
     const isFormActive = localStorage.getItem("formActive");
     if (isFormActive) {
@@ -62,7 +64,7 @@ const FormulaireClient = () => {
 
     if (!validateDate(formData.Données_valides_jusquà)) {
       alert("La date doit être supérieure à la date d'aujourd'hui.");
-      return;
+      return ;
     }
 
     try {
@@ -106,6 +108,20 @@ const FormulaireClient = () => {
     }
   };
 
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
+  
+
   return (
     <Box
       sx={{
@@ -117,211 +133,219 @@ const FormulaireClient = () => {
         boxShadow: 3,
       }}
     >
-      <form className="formulaire-client" onSubmit={handleSubmit}>
-        <h2 className="form-title">Informations générales</h2>
+      <Stepper activeStep={activeStep} alternativeLabel>
+        {steps.map((label, index) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
 
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              label="Nom"
-              variant="outlined"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
+      {activeStep === steps.length ? (
+        <Box sx={{ mt: 2 }}>
+          <Button onClick={handleReset}>Réinitialiser</Button>
+        </Box>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          {activeStep === 0 && (
+            <Box>
+              <h2>Informations générales</h2>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Nom"
+                    variant="outlined"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Groupe Client"
+                    variant="outlined"
+                    name="group_Client"
+                    value={formData.group_Client}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Mot de passe"
+                    variant="outlined"
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Type de Client"
+                    variant="outlined"
+                    name="type_Client"
+                    value={formData.type_Client}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Email"
+                    variant="outlined"
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Num. Téléphone"
+                    variant="outlined"
+                    type="tel"
+                    name="Num_Téléphone"
+                    value={formData.Num_Téléphone}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Devise"
+                    variant="outlined"
+                    name="Devise"
+                    value={formData.Devise}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          )}
 
-         
+          {activeStep === 1 && (
+            <Box>
+              <h2>Adresses</h2>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Pays"
+                    variant="outlined"
+                    name="Pays"
+                    value={formData.Pays}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Région"
+                    variant="outlined"
+                    name="Région"
+                    value={formData.Région}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Etat"
+                    variant="outlined"
+                    name="Etat"
+                    value={formData.Etat}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Ville"
+                    variant="outlined"
+                    name="Ville"
+                    value={formData.Ville}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Code Postal"
+                    variant="outlined"
+                    name="Code_Postal"
+                    value={formData.Code_Postal}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Adresse"
+                    variant="outlined"
+                    name="Adresse"
+                    value={formData.Adresse}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Données valables jusqu'à"
+                    variant="outlined"
+                    type="date"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    name="Données_valides_jusquà"
+                    value={formData.Données_valides_jusquà}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          )}
 
-          <Grid item xs={12}>
-            <TextField
-              label="Groupe Client"
-              variant="outlined"
-              name="group_Client"
-              value={formData.group_Client}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Mot de passe"
-              variant="outlined"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Type de Client"
-              variant="outlined"
-              name="type_Client"
-              value={formData.type_Client}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Email"
-              variant="outlined"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Num. Téléphone"
-              variant="outlined"
-              type="tel"
-              name="Num_Téléphone"
-              value={formData.Num_Téléphone}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Devise"
-              variant="outlined"
-              name="Devise"
-              value={formData.Devise}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <h2 className="form-title">Adresses</h2>
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Pays"
-              variant="outlined"
-              name="Pays"
-              value={formData.Pays}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Région"
-              variant="outlined"
-              name="Région"
-              value={formData.Région}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Etat"
-              variant="outlined"
-              name="Etat"
-              value={formData.Etat}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Ville"
-              variant="outlined"
-              name="Ville"
-              value={formData.Ville}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Code Postal"
-              variant="outlined"
-              name="Code_Postal"
-              value={formData.Code_Postal}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Adresse"
-              variant="outlined"
-              name="Adresse"
-              value={formData.Adresse}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Données valables jusqu'à"
-              variant="outlined"
-              type="date"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              name="Données_valides_jusquà"
-              value={formData.Données_valides_jusquà}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          { /* <Grid   item xs={12}>
-            <Autocomplete
-             disablePortal
-             id="combo-box-demo"
-             options={preferredLanguages}
-             sx={{ width: 300 }}
-             renderInput={(params) => <TextField {...params} label="Langue preferée  " />}
-            />
-          </Grid >  */}
-
-          <Grid item xs={12}>
-            <Button variant="contained" color="primary" type="submit" fullWidth>
-              Sauvegarder
+          <Box sx={{ mt: 2 }}>
+            <Button
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+                            Précédent
             </Button>
-          </Grid>
-        </Grid>
-      </form>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
+            >
+              {activeStep === steps.length - 1 ? "Soumettre" : "Suivant"}
+            </Button>
+          </Box>
+        </form>
+      )}
     </Box>
   );
 };
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 
 export default FormulaireClient;
+
+             

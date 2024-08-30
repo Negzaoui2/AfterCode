@@ -20,6 +20,8 @@ const CustomersList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true); // État pour le chargement
+
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -69,6 +71,8 @@ const CustomersList = () => {
           "Erreur lors de la suppression du client:",
           error.response?.data || error.message
         );
+      }finally{
+        setLoading(false); // Indique que le chargement est terminé
       }
     }
   };
