@@ -12,16 +12,17 @@ import {
   TextField,
   Typography,
   Button,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const CustomersList = () => {
   const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true); // Ajoutez l'état de chargement
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true); // État pour le chargement
-
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -33,6 +34,8 @@ const CustomersList = () => {
           "Erreur lors de la récupération des clients:",
           error.response?.data || error.message
         );
+      } finally {
+        setLoading(false); // Arrêter le chargement après avoir récupéré les données
       }
     };
 
@@ -44,7 +47,7 @@ const CustomersList = () => {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 5));
+    setRowsPerPage(parseInt(event.target.value, 10)); // Correction du deuxième argument en 10
     setPage(0);
   };
 
@@ -71,8 +74,6 @@ const CustomersList = () => {
           "Erreur lors de la suppression du client:",
           error.response?.data || error.message
         );
-      }finally{
-        setLoading(false); // Indique que le chargement est terminé
       }
     }
   };
@@ -101,7 +102,6 @@ const CustomersList = () => {
       >
         Liste des Clients
       </Typography>
-      {/* Create Button */}
       <Button
         variant="contained"
         color="primary"
@@ -111,7 +111,6 @@ const CustomersList = () => {
         Create
       </Button>
 
-      {/* Search Bar */}
       <TextField
         label="Rechercher par nom"
         variant="outlined"
@@ -124,109 +123,121 @@ const CustomersList = () => {
           borderRadius: "5px",
         }}
       />
-      <TableContainer>
-        <Table
-          style={{
-            minWidth: 650,
-            backgroundColor: "#fafafa",
-            borderRadius: "8px",
-          }}
-          sx={{
-            "& .MuiTableCell-root": {
-              padding: "10px",
-              fontSize: "14px",
-              backgroundColor: "#e0e0e0",
-              fontWeight: "600",
-              borderBottom: "2px solid #ddd",
-            },
-          }}
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell
-                style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
-              >
-                ID
-              </TableCell>
-              <TableCell
-                style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
-              >
-                Name
-              </TableCell>
-              <TableCell
-                style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
-              >
-                Email
-              </TableCell>
-              <TableCell
-                style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
-              >
-                Num_Téléphone
-              </TableCell>
-              <TableCell
-                style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
-              >
-                Etat
-              </TableCell>
-              <TableCell
-                style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
-              >
-                Actions
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredCustomers
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((customer) => (
-                <TableRow
-                  key={customer.id}
-                  sx={{ "&:nth-of-type(odd)": { backgroundColor: "#f7f7f7" } }}
-                >
-                  <TableCell>{customer.id}</TableCell>
-                  <TableCell>{customer.name}</TableCell>
-                  <TableCell>{customer.email}</TableCell>
-                  <TableCell>{customer.Num_Téléphone}</TableCell>
-                  <TableCell>{customer.Etat}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleUpdate(customer.id)}
-                      style={{ marginRight: "8px" }}
-                    >
-                      Update
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => handleDelete(customer.id)}
-                    >
-                      Delete
-                    </Button>
+
+      {/* Affichage de l'indicateur de chargement */}
+      {loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          <TableContainer>
+            <Table
+              style={{
+                minWidth: 650,
+                backgroundColor: "#fafafa",
+                borderRadius: "8px",
+              }}
+              sx={{
+                "& .MuiTableCell-root": {
+                  padding: "10px",
+                  fontSize: "14px",
+                  backgroundColor: "#e0e0e0",
+                  fontWeight: "600",
+                  borderBottom: "2px solid #ddd",
+                },
+              }}
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
+                  >
+                    ID
+                  </TableCell>
+                  <TableCell
+                    style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
+                  >
+                    Name
+                  </TableCell>
+                  <TableCell
+                    style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
+                  >
+                    Email
+                  </TableCell>
+                  <TableCell
+                    style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
+                  >
+                    Num_Téléphone
+                  </TableCell>
+                  <TableCell
+                    style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
+                  >
+                    Etat
+                  </TableCell>
+                  <TableCell
+                    style={{ backgroundColor: "#1976d2", color: "#ffffff" }}
+                  >
+                    Actions
                   </TableCell>
                 </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              </TableHead>
+              <TableBody>
+                {filteredCustomers
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((customer) => (
+                    <TableRow
+                      key={customer.id}
+                      sx={{
+                        "&:nth-of-type(odd)": { backgroundColor: "#f7f7f7" },
+                      }}
+                    >
+                      <TableCell>{customer.id}</TableCell>
+                      <TableCell>{customer.name}</TableCell>
+                      <TableCell>{customer.email}</TableCell>
+                      <TableCell>{customer.Num_Téléphone}</TableCell>
+                      <TableCell>{customer.Etat}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleUpdate(customer.id)}
+                          style={{ marginRight: "8px" }}
+                        >
+                          Update
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => handleDelete(customer.id)}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-      <TablePagination
-        component="div"
-        count={filteredCustomers.length}
-        page={page}
-        onPageChange={handleChangePage}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage="Clients par page"
-        sx={{
-          "& .MuiTablePagination-toolbar": {
-            backgroundColor: "#ffffff",
-            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-            borderRadius: "8px",
-          },
-        }}
-      />
+          <TablePagination
+            component="div"
+            count={filteredCustomers.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Clients par page"
+            sx={{
+              "& .MuiTablePagination-toolbar": {
+                backgroundColor: "#ffffff",
+                boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                borderRadius: "8px",
+              },
+            }}
+          />
+        </>
+      )}
     </Paper>
   );
 };

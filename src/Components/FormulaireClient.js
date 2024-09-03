@@ -24,6 +24,8 @@ const FormulaireClient = () => {
   });
 
   const [activeStep, setActiveStep] = useState(0);
+  const [errors, setErrors] = useState({});
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -160,6 +162,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -171,6 +175,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -183,6 +189,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -194,6 +202,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -206,6 +216,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -218,6 +230,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -229,6 +243,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
               </Grid>
@@ -248,6 +264,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -259,6 +277,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -270,6 +290,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -281,6 +303,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -303,6 +327,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -318,6 +344,8 @@ const FormulaireClient = () => {
                     onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.group_Client}
+                    helperText={errors.group_Client}
                   />
                 </Grid>
               </Grid>
